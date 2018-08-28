@@ -5,10 +5,11 @@
 	<button id="signDiv-signUp">Sign Up</button>
 </div>
 
+<body style="margin: 0; overflow: hidden;">
 <div id="gameDiv" style="display:none;">
 	<div id="game" style="position:absolute;width:1500px;height:500px">
-		<canvas id="ctx" width="1500" height="500" style="position:absolute;border:1px solid #000000;"></canvas>
-		<canvas id="ctx-ui" width="1500" height="500" style="position:absolute;border:1px solid #000000;"></canvas>
+		<canvas id="canvas" width="1500" height="500" style="position:absolute;border:1px solid #ffffff;"></canvas>
+		<canvas id="canvas-ui" width="1500" height="500" style="position:absolute;border:1px solid #ffffff;"></canvas>
 		
 		<div id="ui" style="position:absolute;width:1500px;height:500px;">
 			<button onclick="changeMap()" style="position:absolute;bottom:0px;left:0px">
@@ -18,19 +19,19 @@
 		</div>
 		
 	</div>
+
 	
-	
-	<div id="belowGame" style="margin-top:520px">	
-		<div id="chat-text" style="width:500px;height:100px;overflow-y:scroll">
-			<div>Hello!</div>
+<div id="belowGame" style="margin-top:520px">	
+	<div id="chat-text" style="width:500px;height:100px;overflow-y:scroll">
+		<div>Hello!</div>
 		</div>
-		<div id="inventory"></div>
+<div id="inventory"></div>
 		<form id="chat-form">
 			<input id="chat-input" type="text" style="width:500px"></input>
 		</form>
 	</div>
 </div>
-
+</body>
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.js"></script>-->
 <script src="/client/socket.js"></script>
 <script src="/client/Inventory.js"></script>
@@ -39,7 +40,8 @@
 	var WIDTH = 1500;
 	var HEIGHT = 500;
 	var socket = io();
-	
+
+
 	//sign
 	var signDiv = document.getElementById('signDiv');
 	var signDivUsername = document.getElementById('signDiv-username');
@@ -119,9 +121,26 @@
 	Img.map['forest'] = new Image();
 	Img.map['forest'].src = '/client/img/map2.png';
 	
-	var ctx = document.getElementById("ctx").getContext("2d");
-	var ctxUi = document.getElementById("ctx-ui").getContext("2d");
+	var canvas = document.getElementById("canvas");
+	var canvasUi = document.getElementById("canvas-ui");
+	var ctx = canvas.getContext("2d");
+	var ctxUi = canvas.getContext("2d");
 	ctxUi.font = '30px Arial';
+
+	//fullscreen
+	let resizeCanvas = function(){
+		WIDTH = window.innerWidth;
+		HEIGHT = window.innerHeight;
+		canvas.width = WIDTH;
+		canvas.height = HEIGHT;
+		canvasUi.width = WIDTH;
+		canvasUi.height = HEIGHT;
+	}
+	resizeCanvas();
+
+	window.addEventListener('resize',function(){
+		resizeCanvas();
+	});
 	
 	var Player = function(initPack){
 		var self = {};
@@ -246,7 +265,7 @@
 	setInterval(function(){
 		if(!selfId)
 			return;
-		ctx.clearRect(0,0,1500,500);
+		ctx.clearRect(0,0,WIDTH,HEIGHT);
 		drawMap();
 		drawScore();
 		
