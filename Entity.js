@@ -1,7 +1,7 @@
 
 var initPack = { player: [], bullet: [], enemy: []  };
 var removePack = { player: [], bullet: [], enemy: [] };
-
+//test
 
 Entity = function (param) {
 	var self = {
